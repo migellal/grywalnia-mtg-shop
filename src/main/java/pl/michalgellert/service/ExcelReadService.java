@@ -13,7 +13,7 @@ public class ExcelReadService
 {
     public List<XSSFWorkbook> readExcelFiles() throws IOException, InvalidFormatException, NullPointerException
     {
-        String dirPath = "C:\\Users\\mgellert\\Priv\\mtg\\shop_files\\src";
+        String dirPath = "C:\\Users\\mgellert\\Priv\\mtg\\shop_files\\input";
         File dir = new File(dirPath);
         File[] fileList = dir.listFiles();
         

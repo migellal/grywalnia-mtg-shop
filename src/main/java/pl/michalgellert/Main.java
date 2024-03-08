@@ -20,7 +20,8 @@ public class Main
             MtgDataService mtgDataService = new MtgDataService();
 
             List<XSSFWorkbook> excelFiles = excelReadService.readExcelFiles();
-            List<MtgSource> sourceDataList = mtgDataService.findSourceData(excelFiles);
+            List<MtgSource> sourceDataList = mtgDataService.prepareSourceData(excelFiles);
+            mtgDataService.updateMtgCache(sourceDataList);
         }
         catch (Exception e)
         {

@@ -6,13 +6,15 @@ public class MtgSource
     private boolean foil;
     private String comment;
     private Double price;
+    private String contact;
 
-    public MtgSource(String name, boolean foil, String comment, Double price)
+    public MtgSource(String name, boolean foil, String comment, Double price, String contact)
     {
         this.name = name;
         this.foil = foil;
         this.comment = comment;
         this.price = price;
+        this.contact = contact;
     }
 
     public String getName()
@@ -53,6 +55,16 @@ public class MtgSource
     public void setPrice(Double price)
     {
         this.price = price;
+    }
+
+    public String getContact()
+    {
+        return contact;
+    }
+
+    public void setContact(String contact)
+    {
+        this.contact = contact;
     }
 
     public String toString()
