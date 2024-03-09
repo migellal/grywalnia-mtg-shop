@@ -67,7 +67,6 @@ public class ExcelWriteService
             Cell cell;
             cell = row.createCell(0);
             cell.setCellValue(card.getRawName());
-            cell.setCellStyle(style);
             if(card.getImageUrl()!=null) {
                 Hyperlink link = createHelper.createHyperlink(HyperlinkType.URL);
                 link.setAddress(card.getImageUrl());
@@ -77,6 +76,8 @@ public class ExcelWriteService
                 hlink_font.setColor(IndexedColors.BLUE.getIndex());
                 hlink_style.setFont(hlink_font);
                 cell.setHyperlink(link);
+            } else {
+                cell.setCellStyle(style);
             }
 
             cell = row.createCell(1);

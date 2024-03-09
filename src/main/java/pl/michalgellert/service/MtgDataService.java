@@ -179,7 +179,7 @@ public class MtgDataService
             }
             String finalProbablySet = probablySet;
             return availableCards.stream()
-                    .filter(ac -> ac.getSet().equalsIgnoreCase(finalProbablySet))
+                    .filter(ac -> ac.getSet()!= null && ac.getSet().equalsIgnoreCase(finalProbablySet))
                     .findFirst()
                     .orElse(availableCards.get(0));
         }
