@@ -65,17 +65,19 @@ public class ExcelWriteService
 
             Row row = sheet.createRow(rowCounter);
             Cell cell;
-            Hyperlink link = createHelper.createHyperlink(HyperlinkType.URL);
-            link.setAddress(card.getImageUrl());
-            CellStyle hlink_style = workbook.createCellStyle();
-            Font hlink_font = workbook.createFont();
-            hlink_font.setUnderline(Font.U_SINGLE);
-            hlink_font.setColor(IndexedColors.BLUE.getIndex());
-            hlink_style.setFont(hlink_font);
             cell = row.createCell(0);
-            cell.setHyperlink(link);
             cell.setCellValue(card.getRawName());
-            cell.setCellStyle(hlink_style);
+            cell.setCellStyle(style);
+            if(card.getImageUrl()!=null) {
+                Hyperlink link = createHelper.createHyperlink(HyperlinkType.URL);
+                link.setAddress(card.getImageUrl());
+                CellStyle hlink_style = workbook.createCellStyle();
+                Font hlink_font = workbook.createFont();
+                hlink_font.setUnderline(Font.U_SINGLE);
+                hlink_font.setColor(IndexedColors.BLUE.getIndex());
+                hlink_style.setFont(hlink_font);
+                cell.setHyperlink(link);
+            }
 
             cell = row.createCell(1);
             cell.setCellValue(card.getType());

@@ -106,21 +106,33 @@ public class MtgDataService
         List<ExtendedCard> allCards = new ArrayList<>();
         sourceDataList.forEach(s -> {
             List<String> singleton = List.of("name="+s.getName());
-            List<Card> downloadedCards = CardAPI.getAllCards(singleton);
-            if(CollectionUtils.isNotEmpty(downloadedCards))
-            {
-                System.out.println("Downloaded card: " + downloadedCards.get(0).getName());
-                downloadedCards.forEach(c -> {
-                    ExtendedCard extendedCard = new ExtendedCard(c);
+            try {
+                List<Card> downloadedCards = CardAPI.getAllCards(singleton);
+                if(CollectionUtils.isNotEmpty(downloadedCards))
+                {
+                    System.out.println("Downloaded card: " + downloadedCards.get(0).getName());
+                    downloadedCards.forEach(c -> {
+                        ExtendedCard extendedCard = new ExtendedCard(c);
+                        extendedCard.setRawName(s.getRawName());
+                        extendedCard.setPrice(s.getPrice());
+                        extendedCard.setFoil(s.isFoil());
+                        extendedCard.setComment(s.getComment());
+                        extendedCard.setContact(s.getContact());
+                        allCards.add(extendedCard);
+                    });
+                }
+                else {
+                    System.out.println("Card not found: " + s.getName());
+                    ExtendedCard extendedCard = new ExtendedCard();
                     extendedCard.setRawName(s.getRawName());
+                    extendedCard.setName(s.getName());
                     extendedCard.setPrice(s.getPrice());
                     extendedCard.setFoil(s.isFoil());
                     extendedCard.setComment(s.getComment());
                     extendedCard.setContact(s.getContact());
                     allCards.add(extendedCard);
-                });
-            }
-            else {
+                }
+            } catch (Exception e) {
                 System.out.println("Card not found: " + s.getName());
                 ExtendedCard extendedCard = new ExtendedCard();
                 extendedCard.setRawName(s.getRawName());
@@ -147,12 +159,21 @@ public class MtgDataService
     }
 
     private ExtendedCard findCard(MtgSource sc, List<ExtendedCard> availableCards) {
+        if(availableCards.isEmpty()) {
+            ExtendedCard resultCard = new ExtendedCard();
+            resultCard.setName(sc.getName());
+            resultCard.setComment(sc.getComment());
+            resultCard.setPrice(sc.getPrice());
+            resultCard.setFoil(sc.isFoil());
+            resultCard.setContact(sc.getContact());
+            return resultCard;
+        }
         if(availableCards.size()==1) {
             return availableCards.get(0);
         } else {
             String probablySet = null;
             if(sc.getRawName().contains("(")) {
-                probablySet = sc.getRawName().substring(sc.getRawName().lastIndexOf('('), sc.getRawName().lastIndexOf(')'));
+                probablySet = sc.getRawName().substring(sc.getRawName().lastIndexOf('(')+1, sc.getRawName().lastIndexOf(')'));
             } else if(Strings.isNotEmpty(sc.getComment())) {
                 probablySet = Arrays.stream(sc.getComment().split(" ")).findFirst().get();
             }
