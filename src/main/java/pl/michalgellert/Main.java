@@ -1,6 +1,7 @@
 package pl.michalgellert;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import pl.michalgellert.model.ExtendedCard;
 import pl.michalgellert.model.MtgSource;
 import pl.michalgellert.service.ExcelReadService;
 import pl.michalgellert.service.ExcelWriteService;
@@ -21,7 +22,10 @@ public class Main
 
             List<XSSFWorkbook> excelFiles = excelReadService.readExcelFiles();
             List<MtgSource> sourceDataList = mtgDataService.prepareSourceData(excelFiles);
-            mtgDataService.updateMtgCache(sourceDataList);
+//            mtgDataService.updateMtgCache(sourceDataList);
+            List<ExtendedCard> possibleCards = mtgDataService.findPossibleCards(sourceDataList);
+            List<ExtendedCard> shopCards = mtgDataService.findShopCards(sourceDataList, possibleCards);
+            excelWriteService.createShopExcel(shopCards);
         }
         catch (Exception e)
         {

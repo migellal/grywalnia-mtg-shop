@@ -2,19 +2,29 @@ package pl.michalgellert.model;
 
 public class MtgSource
 {
+    private String rawName;
     private String name;
     private boolean foil;
     private String comment;
     private Double price;
     private String contact;
 
-    public MtgSource(String name, boolean foil, String comment, Double price, String contact)
+    public MtgSource(String rawName, String name, boolean foil, String comment, Double price, String contact)
     {
+        this.rawName = rawName;
         this.name = name;
         this.foil = foil;
         this.comment = comment;
         this.price = price;
         this.contact = contact;
+    }
+
+    public String getRawName() {
+        return rawName;
+    }
+
+    public void setRawName(String rawName) {
+        this.rawName = rawName;
     }
 
     public String getName()

@@ -4,6 +4,8 @@ import io.magicthegathering.javasdk.resource.Card;
 
 public class ExtendedCard extends Card
 {
+    private String rawName;
+
     private Double price;
 
     private Double priceInEuro;
@@ -68,6 +70,13 @@ public class ExtendedCard extends Card
         setForeignNames(card.getForeignNames());
     }
 
+    public String getRawName() {
+        return rawName;
+    }
+
+    public void setRawName(String rawName) {
+        this.rawName = rawName;
+    }
 
     public Double getPrice()
     {
