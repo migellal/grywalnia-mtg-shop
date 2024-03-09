@@ -73,7 +73,7 @@ public class MtgDataService
             List<Card> downloadedCards = CardAPI.getAllCards(singleton);
             if(CollectionUtils.isNotEmpty(downloadedCards))
             {
-                System.out.println("Downloaded card: " + downloadedCards.getFirst().getName());
+                System.out.println("Downloaded card: " + downloadedCards.get(0).getName());
                 downloadedCards.forEach(c -> {
                     ExtendedCard extendedCard = new ExtendedCard(c);
                     extendedCard.setRawName(s.getRawName());
@@ -109,7 +109,7 @@ public class MtgDataService
             List<Card> downloadedCards = CardAPI.getAllCards(singleton);
             if(CollectionUtils.isNotEmpty(downloadedCards))
             {
-                System.out.println("Downloaded card: " + downloadedCards.getFirst().getName());
+                System.out.println("Downloaded card: " + downloadedCards.get(0).getName());
                 downloadedCards.forEach(c -> {
                     ExtendedCard extendedCard = new ExtendedCard(c);
                     extendedCard.setRawName(s.getRawName());
@@ -148,7 +148,7 @@ public class MtgDataService
 
     private ExtendedCard findCard(MtgSource sc, List<ExtendedCard> availableCards) {
         if(availableCards.size()==1) {
-            return availableCards.getFirst();
+            return availableCards.get(0);
         } else {
             String probablySet = null;
             if(sc.getRawName().contains("(")) {
@@ -160,7 +160,7 @@ public class MtgDataService
             return availableCards.stream()
                     .filter(ac -> ac.getSet().equalsIgnoreCase(finalProbablySet))
                     .findFirst()
-                    .orElse(availableCards.getFirst());
+                    .orElse(availableCards.get(0));
         }
     }
 }
