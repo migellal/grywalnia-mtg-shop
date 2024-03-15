@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import io.magicthegathering.javasdk.api.CardAPI;
 import io.magicthegathering.javasdk.resource.Card;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
@@ -45,6 +46,11 @@ public class MtgDataService
                     break;
                 }
                 String rawName = row.getCell(0).getStringCellValue();
+                int i = 1;
+                if(startsWithNumber(rawName)) {
+                    i = getNumberFromRawName(rawName);
+                    rawName = removeNumberFromRawName(rawName);
+                }
                 String name = rawName;
                 if(rawName.contains("(")) {
                     name = rawName.substring(0, rawName.lastIndexOf('(')).trim();
@@ -52,17 +58,40 @@ public class MtgDataService
                 CellType cellType = row.getCell(1).getCellType();
                 boolean foil = false;
                 switch (cellType) {
-                    case STRING -> foil = row.getCell(1).getStringCellValue().equalsIgnoreCase("1");
+                    case STRING -> foil = row.getCell(1).getStringCellValue().equalsIgnoreCase("1")
+                            || row.getCell(1).getStringCellValue().equalsIgnoreCase("foil");
                     case NUMERIC -> foil = row.getCell(1).getNumericCellValue() == 1;
                     default -> {
                     }
                 }
                 String comment = row.getCell(2).getStringCellValue();
-                Double price = row.getCell(3).getNumericCellValue();
-                sourceDataList.add(new MtgSource(rawName, name, foil, comment, price, contact));
+                Double price = null;
+                cellType = row.getCell(3).getCellType();
+                switch (cellType) {
+                    case STRING -> price = Double.parseDouble(row.getCell(3).getStringCellValue());
+                    case NUMERIC -> price = row.getCell(3).getNumericCellValue();
+                    default -> {
+                    }
+                }
+                for (int j = 0; j < i; j++) {
+                    sourceDataList.add(new MtgSource(rawName, name, foil, comment, price, contact));
+                }
             }
         }
         return sourceDataList;
+    }
+
+    private int getNumberFromRawName(String rawName) {
+        return Integer.parseInt(rawName.split(" ")[0]);
+    }
+
+    private String removeNumberFromRawName(String rawName) {
+        return rawName.substring(2);
+    }
+
+    private boolean startsWithNumber(String rawName) {
+        char c = rawName.charAt(0);
+        return Character.isDigit(c);
     }
 
     public void updateMtgCache(List<MtgSource> sourceDataList) throws IOException
